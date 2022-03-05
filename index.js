@@ -33,7 +33,7 @@ const main = async () => {
     accessSecret: process.env.ACCESS_TOKEN_SECRET,
   });
   const mediaId = await twitterClient.v1.uploadMedia("./output/image.png");
-  await twitterClient.v1.tweet(`#VeChain $vet price: $ ${price}`, {
+  await twitterClient.v1.tweet(`#VeChain #VeFam $vet price: $ ${price}`, {
     media_ids: [mediaId],
   });
 
