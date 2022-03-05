@@ -22,6 +22,7 @@ const main = async () => {
   });
   // const twitterClient = new TwitterApi(process.env.BEARER_TOKEN);
 
+  await sleep(1000);
   const twitterClient = new TwitterApi({
     appKey: process.env.API_KEY,
     appSecret: process.env.API_KEY_SECRET,
@@ -54,5 +55,7 @@ const main = async () => {
   );
   */
 };
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 main();
