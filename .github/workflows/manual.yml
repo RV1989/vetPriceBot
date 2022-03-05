@@ -10,9 +10,9 @@ on:
     inputs:
       name:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
+        description: "Person to greet"
         # Default value if no value is explicitly provided
-        default: 'World'
+        default: "World"
         # Input has to be provided for the workflow to run
         required: true
 
@@ -26,20 +26,20 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-      env: # Or as an environment variable
-        API_KEY: ${{secrets.API_KEY}}
-        API_KEY_SECRET: ${{secrets.API_KEY_SECRET}}
-        ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
-        ACCESS_TOKEN_SECRET: ${{secrets.ACCESS_TOKEN_SECRET}}
-        BEARER_TOKEN: ${{secrets.BEARER_TOKEN}}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: printenv 
-    - run: npm start
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: printenv
+      - run: npm start
+        env: # Or as an environment variable
+          TWITTER_API_KEY: ${{secrets.API_KEY}}
+          TWITTER_API_KEY_SECRET: ${{secrets.API_KEY_SECRET}}
+          TWITTER_ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{secrets.ACCESS_TOKEN_SECRET}}
+          TWITTER_BEARER_TOKEN: ${{secrets.BEARER_TOKEN}}
