@@ -2,19 +2,18 @@ require("dotenv").config();
 const CoinGecko = require("coingecko-api");
 const createImage = require("./createImage").createImage;
 const { TwitterApi } = require("twitter-api-v2");
+const getPriceLastHour = require("./coinGecko").getPriceLastHour;
+const getPriceNow = require("./coinGecko").getPriceNow;
 const main = async () => {
-  const CoinGeckoClient = new CoinGecko();
-  const { data } = await CoinGeckoClient.simple
-    .price({
-      ids: ["vechain"],
-      vs_currencies: ["usd"],
-    })
-    .catch((error) => {
-      console.log(error);
-      process.exit(1);
-    });
+  const price = await getPriceNow().catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });
 
-  const price = data.vechain.usd;
+  const priceLastHour = await getPriceLastHour().catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });
 
   await createImage(price).catch((error) => {
     console.log(error);
@@ -34,9 +33,14 @@ const main = async () => {
     accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
   });
   const mediaId = await twitterClient.v1.uploadMedia("./output/image.png");
-  await twitterClient.v1.tweet(`#VeChain #VeFam $vet price: $ ${price}`, {
-    media_ids: [mediaId],
-  });
+  await twitterClient.v1.tweet(
+    `#VeChain #VeFam $vet price: $ ${price} ${
+      price - priceLastHour > 0 ? "📈" : "📉"
+    }`,
+    {
+      media_ids: [mediaId],
+    }
+  );
 
   /*
   var T = new Twit({
