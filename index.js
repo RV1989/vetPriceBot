@@ -1,10 +1,7 @@
-const { createCanvas, loadImage } = require("canvas");
 require("dotenv").config();
-const fs = require("fs").promises;
 const CoinGecko = require("coingecko-api");
+const createImage = require("./createImage").createImage;
 const { TwitterApi } = require("twitter-api-v2");
-var Twit = require("twit");
-
 const main = async () => {
   const CoinGeckoClient = new CoinGecko();
   const { data } = await CoinGeckoClient.simple
@@ -56,24 +53,6 @@ const main = async () => {
     }
   );
   */
-};
-
-const createImage = async (price) => {
-  const canvas = createCanvas(1600, 418);
-  const ctx = canvas.getContext("2d");
-  loadImage("./img/layout.png").then((image) => {
-    ctx.drawImage(image, 0, -1, 1600, 420);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.font = "150px Arial black"; // To change font size and type
-
-    var textString = `$${price.toFixed(3)}`;
-
-    ctx.fillText(textString, canvas.width / 2, canvas.height / 2);
-
-    const buffer = canvas.toBuffer("image/png");
-    return fs.writeFile("./output/image.png", buffer);
-  });
 };
 
 main();
