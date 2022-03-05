@@ -20,6 +20,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: myenvironment
     strategy:
       matrix:
         node-version: [16.x]
