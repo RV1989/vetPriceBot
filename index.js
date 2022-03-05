@@ -67,7 +67,7 @@ const createImage = async (price) => {
     ctx.textBaseline = "middle";
     ctx.font = "150px Arial black"; // To change font size and type
 
-    var textString = `$${price.toFixed(4)}`;
+    var textString = `$${price.toFixed(3)}`;
 
     ctx.fillText(textString, canvas.width / 2, canvas.height / 2);
 
