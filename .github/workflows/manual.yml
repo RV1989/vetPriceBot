@@ -1,0 +1,44 @@
+# This is a basic workflow that is manually triggered
+
+name: Manual workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Person to greet'
+        # Default value if no value is explicitly provided
+        default: 'World'
+        # Input has to be provided for the workflow to run
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+      env: # Or as an environment variable
+        API_KEY: ${{secrets.API_KEY}}
+        API_KEY_SECRET: ${{secrets.API_KEY_SECRET}}
+        ACCESS_TOKEN: ${{secrets.ACCESS_TOKEN}}
+        ACCESS_TOKEN_SECRET: ${{secrets.ACCESS_TOKEN_SECRET}}
+        BEARER_TOKEN: ${{secrets.BEARER_TOKEN}}
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm start
